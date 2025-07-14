@@ -227,6 +227,85 @@
             color: var(--text-color);
         }
 
+        .voting-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+        }
+
+        .vote-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .vote-btn {
+            background: none;
+            border: 2px solid #e0e0e0;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vote-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .vote-btn.upvote {
+            color: #28a745;
+            border-color: #28a745;
+        }
+
+        .vote-btn.upvote:hover, .vote-btn.upvote.voted {
+            background: #28a745;
+            color: white;
+        }
+
+        .vote-btn.downvote {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .vote-btn.downvote:hover, .vote-btn.downvote.voted {
+            background: #dc3545;
+            color: white;
+        }
+
+        .vote-count {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: var(--secondary-color);
+            min-height: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .vote-count.positive {
+            color: #28a745;
+        }
+
+        .vote-count.negative {
+            color: #dc3545;
+        }
+
+        .voting-info {
+            background: rgba(74, 144, 164, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #5a6c7d;
+            font-size: 0.95em;
+        }
+
         /* Responsive Design */
         @media screen and (max-width: 768px) {
             body {
@@ -297,6 +376,10 @@
             </div>
         </div>
 
+        <div class="voting-info">
+            💡 <strong>Help us prioritize!</strong> Vote on the suggestions you think would be most effective for SFBBO's tabling events. Your feedback will help inform the 2026 outreach budget decisions.
+        </div>
+
         <div class="table-container">
             <table>
                 <thead>
@@ -305,109 +388,357 @@
                         <th>Consolidated Idea</th>
                         <th>Details and Notes</th>
                         <th>Proposed By</th>
+                        <th>Community Vote</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="category-signage">
+                    <tr class="category-signage" data-id="1">
                         <td>🎨 Signage & Visual Branding</td>
                         <td><div class="idea-title">Update Banner & Tablecloth</div></td>
                         <td class="details-text">Refresh the primary banner to be more modern and artistic. Procure a new, modern tablecloth with the updated logo, potentially an adjustable one from a site like 4imprint.com.</td>
                         <td class="proposer">Elaine, Jan</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(1, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(1, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-1">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-signage">
+                    <tr class="category-signage" data-id="2">
                         <td>🎨 Signage & Visual Branding</td>
                         <td><div class="idea-title">Digital Video/Photo Display</div></td>
                         <td class="details-text">Use a laptop or digital frame to play a short (2-minute) rolling video about SFBBO's mission. A rotating digital photo display could also showcase the wide range of projects.</td>
                         <td class="proposer">Chris, Jan</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(2, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(2, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-2">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-signage">
+                    <tr class="category-signage" data-id="3">
                         <td>🎨 Signage & Visual Branding</td>
                         <td><div class="idea-title">Enlarged Bay Area Project Map</div></td>
                         <td class="details-text">Display an enlarged, poster-sized map of the Bay Area to use as a conversation starter. A map showing SFBBO's active project sites already exists in a handout and could be adapted.</td>
                         <td class="proposer">Lisa, Debbie</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(3, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(3, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-3">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-interactive">
+                    <tr class="category-interactive" data-id="4">
                         <td>🎮 Interactive Displays & Games</td>
                         <td><div class="idea-title">Interactive Bird ID Game</div></td>
                         <td class="details-text">Instead of a single-user scope, use three large photos of shorebirds (e.g., Snowy Plover, Killdeer, Long-billed Curlew) so groups can identify field marks together.</td>
                         <td class="proposer">Lisa</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(4, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(4, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-4">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-interactive">
+                    <tr class="category-interactive" data-id="5">
                         <td>🎮 Interactive Displays & Games</td>
                         <td><div class="idea-title">Expanded Migration Map</div></td>
                         <td class="details-text">Enhance the existing migration map to include birds SFBBO researches and incorporate MOTUS data. Add "jaw dropping" fun facts that passersby can read. The display could be made more interactive with laminated maps and velcro to show complex migration routes.</td>
                         <td class="proposer">Jan, Lisa</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(5, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(5, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-5">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-interactive">
+                    <tr class="category-interactive" data-id="6">
                         <td>🎮 Interactive Displays & Games</td>
                         <td><div class="idea-title">Banding & MOTUS Display</div></td>
                         <td class="details-text">Create a unified display featuring: a shortened, modified mist net from the station's old stock, potentially with a fake bird in it; a string of different-sized bird bands or old/problem bands if possible; and a photo/map of MOTUS towers.</td>
                         <td class="proposer">Jan, Lisa, Debbie</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(6, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(6, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-6">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-interactive">
+                    <tr class="category-interactive" data-id="7">
                         <td>🎮 Interactive Displays & Games</td>
                         <td><div class="idea-title">Matching Games</div></td>
                         <td class="details-text">Create a game where participants match program pins to a mission poster. Another idea is a larger, "lift the flap" style game matching photos of birds to their unique nest types (e.g., cup, scrape, hanging).</td>
                         <td class="proposer">Debbie, Jan</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(7, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(7, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-7">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-physical">
+                    <tr class="category-physical" data-id="8">
                         <td>🔬 Physical Models & Specimens</td>
                         <td><div class="idea-title">Nest & Egg Display</div></td>
                         <td class="details-text">Create a display with real bird nests, which could be sourced from volunteers or rehab centers. The display could also feature a model, like a fake gull on a nest with eggs, and subtle audio of bird calls.</td>
                         <td class="proposer">Jan, Lisa</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(8, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(8, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-8">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-physical">
+                    <tr class="category-physical" data-id="9">
                         <td>🔬 Physical Models & Specimens</td>
                         <td><div class="idea-title">Habitat Restoration Props</div></td>
                         <td class="details-text">Use simple props like a hand shovel, gloves, and fake grasses on the table to initiate conversations about habitat restoration and volunteer opportunities.</td>
                         <td class="proposer">Lisa</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(9, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(9, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-9">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-physical">
+                    <tr class="category-physical" data-id="10">
                         <td>🔬 Physical Models & Specimens</td>
                         <td><div class="idea-title">Bird Specimen Display</div></td>
                         <td class="details-text">Use the organization's collection of donated dead birds for a "show and tell" display. Staff could be asked about using bird skins that are currently destined for storage, which could be displayed in protective tubes.</td>
                         <td class="proposer">Jan, Debbie</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(10, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(10, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-10">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-physical">
+                    <tr class="category-physical" data-id="11">
                         <td>🔬 Physical Models & Specimens</td>
                         <td><div class="idea-title">Burrowing Owl Display</div></td>
                         <td class="details-text">Use a photo of a Burrowing Owl to create an engaging educational moment by asking visitors where owls live.</td>
                         <td class="proposer">Lisa</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(11, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(11, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-11">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-physical">
+                    <tr class="category-physical" data-id="12">
                         <td>🔬 Physical Models & Specimens</td>
                         <td><div class="idea-title">Hand-holdable Models</div></td>
                         <td class="details-text">Have secured, hand-holdable models of different bird beaks and feet to demonstrate adaptation.</td>
                         <td class="proposer">Jan</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(12, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(12, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-12">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-giveaways">
+                    <tr class="category-giveaways" data-id="13">
                         <td>🎁 Giveaways</td>
                         <td><div class="idea-title">Stickers & Buttons</div></td>
                         <td class="details-text">Produce stickers and buttons, as people enjoy them. New stickers could be created using popular designs from SFBBO's long history of t-shirts.</td>
                         <td class="proposer">Jan</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(13, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(13, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-13">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-giveaways">
+                    <tr class="category-giveaways" data-id="14">
                         <td>🎁 Giveaways</td>
                         <td><div class="idea-title">3D-Printed Items</div></td>
                         <td class="details-text">As a unique and inexpensive giveaway, produce 3D-printed items like bird whistles.</td>
                         <td class="proposer">Elaine</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(14, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(14, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-14">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-printed">
+                    <tr class="category-printed" data-id="15">
                         <td>📄 Printed Materials</td>
                         <td><div class="idea-title">Informational Handouts</div></td>
                         <td class="details-text">Develop one-page summaries for specific projects. Consider a smaller, postcard-sized handout with project thumbnails and contact/social media info.</td>
                         <td class="proposer">Jan</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(15, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(15, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-15">0</div>
+                            </div>
+                        </td>
                     </tr>
-                    <tr class="category-printed">
+                    <tr class="category-printed" data-id="16">
                         <td>📄 Printed Materials</td>
                         <td><div class="idea-title">FAQ & Business Cards</div></td>
                         <td class="details-text">Revive and update a master FAQ sheet for common questions, especially regarding youth volunteer opportunities. Have general business cards available that point to an outreach contact.</td>
                         <td class="proposer">Jan</td>
+                        <td>
+                            <div class="voting-section">
+                                <div class="vote-buttons">
+                                    <button class="vote-btn upvote" onclick="vote(16, 'up')">👍</button>
+                                    <button class="vote-btn downvote" onclick="vote(16, 'down')">👎</button>
+                                </div>
+                                <div class="vote-count" id="count-16">0</div>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <script>
+        // Initialize vote counts from localStorage or set to 0
+        const votes = JSON.parse(localStorage.getItem('sfbbo-votes')) || {};
+        const userVotes = JSON.parse(localStorage.getItem('sfbbo-user-votes')) || {};
+
+        // Initialize vote counts on page load
+        for (let i = 1; i <= 16; i++) {
+            updateVoteDisplay(i);
+        }
+
+        function vote(id, direction) {
+            const userId = getUserId();
+            const voteKey = `${userId}-${id}`;
+            
+            // Check if user has already voted on this item
+            if (userVotes[voteKey]) {
+                const previousVote = userVotes[voteKey];
+                // Remove previous vote
+                if (previousVote === 'up') {
+                    votes[id] = (votes[id] || 0) - 1;
+                } else {
+                    votes[id] = (votes[id] || 0) + 1;
+                }
+                
+                // If clicking the same vote, just remove it
+                if (previousVote === direction) {
+                    delete userVotes[voteKey];
+                    updateButtonStates(id, null);
+                } else {
+                    // Switch to opposite vote
+                    userVotes[voteKey] = direction;
+                    if (direction === 'up') {
+                        votes[id] = (votes[id] || 0) + 1;
+                    } else {
+                        votes[id] = (votes[id] || 0) - 1;
+                    }
+                    updateButtonStates(id, direction);
+                }
+            } else {
+                // New vote
+                userVotes[voteKey] = direction;
+                if (direction === 'up') {
+                    votes[id] = (votes[id] || 0) + 1;
+                } else {
+                    votes[id] = (votes[id] || 0) - 1;
+                }
+                updateButtonStates(id, direction);
+            }
+
+            // Save to localStorage
+            localStorage.setItem('sfbbo-votes', JSON.stringify(votes));
+            localStorage.setItem('sfbbo-user-votes', JSON.stringify(userVotes));
+            
+            updateVoteDisplay(id);
+        }
+
+        function updateVoteDisplay(id) {
+            const countElement = document.getElementById(`count-${id}`);
+            const count = votes[id] || 0;
+            countElement.textContent = count > 0 ? `+${count}` : count.toString();
+            
+            // Update styling based on vote count
+            countElement.className = 'vote-count';
+            if (count > 0) {
+                countElement.classList.add('positive');
+            } else if (count < 0) {
+                countElement.classList.add('negative');
+            }
+
+            // Update button states
+            const userId = getUserId();
+            const voteKey = `${userId}-${id}`;
+            const userVote = userVotes[voteKey];
+            updateButtonStates(id, userVote);
+        }
+
+        function updateButtonStates(id, userVote) {
+            const upBtn = document.querySelector(`[onclick="vote(${id}, 'up')"]`);
+            const downBtn = document.querySelector(`[onclick="vote(${id}, 'down')"]`);
+            
+            // Reset button states
+            upBtn.classList.remove('voted');
+            downBtn.classList.remove('voted');
+            
+            // Apply voted state
+            if (userVote === 'up') {
+                upBtn.classList.add('voted');
+            } else if (userVote === 'down') {
+                downBtn.classList.add('voted');
+            }
+        }
+
+        function getUserId() {
+            // Simple user identification - in a real app, this would be more sophisticated
+            let userId = localStorage.getItem('sfbbo-user-id');
+            if (!userId) {
+                userId = 'user-' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('sfbbo-user-id', userId);
+            }
+            return userId;
+        }
+    </script>
 
 </body>
 
