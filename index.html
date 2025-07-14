@@ -122,57 +122,80 @@
             border-left: 4px solid var(--secondary-color);
         }
 
-        .table-container {
-            overflow-x: auto;
+        .accordion-container {
             border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .accordion-item {
             background: #ffffff;
-        }
-
-        th,
-        td {
-            padding: 18px 22px;
-            text-align: left;
             border-bottom: 1px solid var(--table-border-color);
-            transition: all 0.3s ease;
         }
 
-        thead th {
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-header {
             background: var(--table-header-bg);
+            padding: 18px 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
             font-family: 'Lato', sans-serif;
             font-weight: 700;
             color: #ffffff;
-            font-size: 0.95em;
-            text-transform: uppercase;
+            font-size: 1.1em;
             letter-spacing: 0.5px;
-            position: relative;
         }
-        
-        thead th:first-child { border-radius: 12px 0 0 0; }
-        thead th:last-child { border-radius: 0 12px 0 0; }
 
-        tbody tr {
+        .accordion-header:hover {
+            background: linear-gradient(135deg, #2d6e7e 0%, #1e4d5b 100%);
+        }
+
+        .accordion-indicator {
+            margin-right: 12px;
+            font-size: 0.9em;
+            transition: transform 0.3s ease;
+            width: 20px;
+            text-align: center;
+        }
+
+        .accordion-item.expanded .accordion-indicator {
+            transform: rotate(90deg);
+        }
+
+        .accordion-content {
+            display: none;
+            background: #ffffff;
+        }
+
+        .accordion-item.expanded .accordion-content {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--table-border-color);
             transition: all 0.3s ease;
+            display: grid;
+            grid-template-columns: 2fr 3fr 1fr;
+            gap: 20px;
+            align-items: start;
         }
 
-        tbody tr:nth-of-type(even) {
+        .suggestion-item:nth-of-type(even) {
             background-color: var(--row-bg-odd);
         }
 
-        tbody tr:hover {
+        .suggestion-item:hover {
             background: linear-gradient(135deg, rgba(135, 206, 235, 0.15) 0%, rgba(74, 144, 164, 0.1) 100%);
         }
 
-        tbody tr:last-child td:first-child { border-radius: 0 0 0 12px; }
-        tbody tr:last-child td:last-child { border-radius: 0 0 12px 0; }
-
-        td:first-child {
-            font-weight: 600;
-            color: var(--primary-color);
+        .suggestion-item:last-child {
+            border-bottom: none;
         }
 
         .proposer {
@@ -187,10 +210,16 @@
             display: inline-block;
         }
 
-        .idea-title {
+        .suggestion-title {
             font-weight: 600;
             color: var(--secondary-color);
             margin-bottom: 4px;
+            font-size: 1.1em;
+        }
+
+        .suggestion-details {
+            color: var(--text-color);
+            line-height: 1.6;
         }
 
         .category-toggle {
@@ -213,56 +242,33 @@
             .container { padding: 15px; margin: 10px auto; }
             h1 { font-size: 2em; }
             .subtitle { font-size: 1em; }
-            .table-container { overflow-x: hidden; }
-            table, thead, tbody, th, td, tr { display: block; }
-            thead { display: none; }
-            tbody tr {
-                margin-bottom: 15px;
-                border: 1px solid var(--table-border-color);
-                border-radius: 8px;
-                padding: 15px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-                background-color: var(--row-bg-even);
+            
+            .accordion-header {
+                padding: 15px 18px;
+                font-size: 1em;
             }
-            tbody tr:nth-of-type(even) {
-                 background-color: var(--row-bg-even);
+            
+            .suggestion-item {
+                padding: 15px 18px;
+                grid-template-columns: 1fr;
+                gap: 12px;
             }
-            td {
-                padding: 10px 5px;
-                border: none;
-                border-bottom: 1px dashed var(--table-border-color);
-                text-align: left !important;
-                white-space: normal;
-            }
-            td:last-child {
-                border-bottom: none;
-            }
-            td::before {
-                content: attr(data-label);
-                display: block;
-                font-weight: 700;
-                font-family: 'Lato', sans-serif;
-                color: var(--primary-color);
-                margin-bottom: 5px;
-                font-size: 0.8em;
-                text-transform: uppercase;
-            }
-            td .idea-title {
-                display: none;
-            }
-            td[data-label="Category"]::before {
-                display: none;
-            }
-            td[data-label="Category"] {
+            
+            .suggestion-title {
                 font-size: 1.1em;
-                padding-top: 0;
-                border-bottom: 1px solid var(--table-border-color);
+                margin-bottom: 8px;
+                border-bottom: 1px dashed var(--table-border-color);
+                padding-bottom: 8px;
             }
-            td[data-label="Proposed By"] {
-                padding-bottom: 0;
+            
+            .suggestion-details {
+                margin-bottom: 8px;
             }
+            
             .proposer {
                 font-size: 0.95em;
+                margin-top: 8px;
+                align-self: start;
             }
         }
     </style>
@@ -278,163 +284,188 @@
                 tables. The staff will consider these suggestions for the 2026 outreach budget.</p>
                 
             <div class="instructions">
-                💡 <strong>Browse by category:</strong> Click on any category header (marked with ▶) to expand and see all suggestions in that group.
+                💡 <strong>Browse by category:</strong> Click on any category header to expand and see all suggestions in that group.
             </div>
         </div>
 
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Suggestion Category</th>
-                        <th>Consolidated Idea</th>
-                        <th>Details and Notes</th>
-                        <th>Proposed By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="category-signage">
-                        <td data-label="Category">🎨 Signage & Visual Branding</td>
-                        <td data-label="Idea"><div class="idea-title">Update Banner & Tablecloth</div></td>
-                        <td data-label="Details" class="details-text">Refresh the primary banner to be more modern and artistic. Procure a new, modern tablecloth with the updated logo, potentially an adjustable one from a site like 4imprint.com.</td>
-                        <td data-label="Proposed By"><span class="proposer">Elaine, Jan</span></td>
-                    </tr>
-                    <tr class="category-signage">
-                        <td data-label="Category">🎨 Signage & Visual Branding</td>
-                        <td data-label="Idea"><div class="idea-title">Digital Video/Photo Display</div></td>
-                        <td data-label="Details" class="details-text">Use a laptop or digital frame to play a short (2-minute) rolling video about SFBBO's mission. A rotating digital photo display could also showcase the wide range of projects.</td>
-                        <td data-label="Proposed By"><span class="proposer">Chris, Jan</span></td>
-                    </tr>
-                    <tr class="category-signage">
-                        <td data-label="Category">🎨 Signage & Visual Branding</td>
-                        <td data-label="Idea"><div class="idea-title">Enlarged Bay Area Project Map</div></td>
-                        <td data-label="Details" class="details-text">Display an enlarged, poster-sized map of the Bay Area to use as a conversation starter. A map showing SFBBO's active project sites already exists in a handout and could be adapted.</td>
-                        <td data-label="Proposed By"><span class="proposer">Lisa, Debbie</span></td>
-                    </tr>
-                    <tr class="category-interactive">
-                        <td data-label="Category">🎮 Interactive Displays & Games</td>
-                        <td data-label="Idea"><div class="idea-title">Interactive Bird ID Game</div></td>
-                        <td data-label="Details" class="details-text">Instead of a single-user scope, use three large photos of shorebirds (e.g., Snowy Plover, Killdeer, Long-billed Curlew) so groups can identify field marks together.</td>
-                        <td data-label="Proposed By"><span class="proposer">Lisa</span></td>
-                    </tr>
-                    <tr class="category-interactive">
-                        <td data-label="Category">🎮 Interactive Displays & Games</td>
-                        <td data-label="Idea"><div class="idea-title">Expanded Migration Map</div></td>
-                        <td data-label="Details" class="details-text">Enhance the existing migration map to include birds SFBBO researches and incorporate MOTUS data. Add "jaw dropping" fun facts that passersby can read. The display could be made more interactive with laminated maps and velcro to show complex migration routes.</td>
-                        <td data-label="Proposed By"><span class="proposer">Jan, Lisa</span></td>
-                    </tr>
-                    <tr class="category-interactive">
-                        <td data-label="Category">🎮 Interactive Displays & Games</td>
-                        <td data-label="Idea"><div class="idea-title">Banding & MOTUS Display</div></td>
-                        <td data-label="Details" class="details-text">Create a unified display featuring: a shortened, modified mist net from the station's old stock, potentially with a fake bird in it; a string of different-sized bird bands or old/problem bands if possible; and a photo/map of MOTUS towers.</td>
-                        <td data-label="Proposed By"><span class="proposer">Jan, Lisa, Debbie</span></td>
-                    </tr>
-                    <tr class="category-interactive">
-                        <td data-label="Category">🎮 Interactive Displays & Games</td>
-                        <td data-label="Idea"><div class="idea-title">Matching Games</div></td>
-                        <td data-label="Details" class="details-text">Create a game where participants match program pins to a mission poster. Another idea is a larger, "lift the flap" style game matching photos of birds to their unique nest types (e.g., cup, scrape, hanging).</td>
-                        <td data-label="Proposed By"><span class="proposer">Debbie, Jan</span></td>
-                    </tr>
-                    <tr class="category-physical">
-                        <td data-label="Category">🔬 Physical Models & Specimens</td>
-                        <td data-label="Idea"><div class="idea-title">Nest & Egg Display</div></td>
-                        <td data-label="Details" class="details-text">Create a display with real bird nests, which could be sourced from volunteers or rehab centers. The display could also feature a model, like a fake gull on a nest with eggs, and subtle audio of bird calls.</td>
-                        <td data-label="Proposed By"><span class="proposer">Jan, Lisa</span></td>
-                    </tr>
-                    <tr class="category-physical">
-                        <td data-label="Category">🔬 Physical Models & Specimens</td>
-                        <td data-label="Idea"><div class="idea-title">Habitat Restoration Props</div></td>
-                        <td data-label="Details" class="details-text">Use simple props like a hand shovel, gloves, and fake grasses on the table to initiate conversations about habitat restoration and volunteer opportunities.</td>
-                        <td data-label="Proposed By"><span class="proposer">Lisa</span></td>
-                    </tr>
-                    <tr class="category-physical">
-                        <td data-label="Category">🔬 Physical Models & Specimens</td>
-                        <td data-label="Idea"><div class="idea-title">Bird Specimen Display</div></td>
-                        <td data-label="Details" class="details-text">Use the organization's collection of donated dead birds for a "show and tell" display. Staff could be asked about using bird skins that are currently destined for storage, which could be displayed in protective tubes.</td>
-                        <td data-label="Proposed By"><span class="proposer">Jan, Debbie</span></td>
-                    </tr>
-                    <tr class="category-physical">
-                        <td data-label="Category">🔬 Physical Models & Specimens</td>
-                        <td data-label="Idea"><div class="idea-title">Burrowing Owl Display</div></td>
-                        <td data-label="Details" class="details-text">Use a photo of a Burrowing Owl to create an engaging educational moment by asking visitors where owls live.</td>
-                        <td data-label="Proposed By"><span class="proposer">Lisa</span></td>
-                    </tr>
-                    <tr class="category-physical">
-                        <td data-label="Category">🔬 Physical Models & Specimens</td>
-                        <td data-label="Idea"><div class="idea-title">Hand-holdable Models</div></td>
-                        <td data-label="Details" class="details-text">Have secured, a hand-holdable models of different bird beaks and feet to demonstrate adaptation.</td>
-                        <td data-label="Proposed By"><span class="proposer">Jan</span></td>
-                    </tr>
-                    <tr class="category-giveaways">
-                        <td data-label="Category">🎁 Giveaways</td>
-                        <td data-label="Idea"><div class="idea-title">Stickers & Buttons</div></td>
-                        <td data-label="Details" class="details-text">Produce stickers and buttons, as people enjoy them. New stickers could be created using popular designs from SFBBO's long history of t-shirts.</td>
-                        <td data-label="Proposed By"><span class="proposer">Jan</span></td>
-                    </tr>
-                    <tr class="category-giveaways">
-                        <td data-label="Category">🎁 Giveaways</td>
-                        <td data-label="Idea"><div class="idea-title">3D-Printed Items</div></td>
-                        <td data-label="Details" class="details-text">As a unique and inexpensive giveaway, produce 3D-printed items like bird whistles.</td>
-                        <td data-label="Proposed By"><span class="proposer">Elaine</span></td>
-                    </tr>
-                    <tr class="category-printed">
-                        <td data-label="Category">📄 Printed Materials</td>
-                        <td data-label="Idea"><div class="idea-title">Informational Handouts</div></td>
-                        <td data-label="Details" class="details-text">Develop one-page summaries for specific projects. Consider a smaller, postcard-sized handout with project thumbnails and contact/social media info.</td>
-                        <td data-label="Proposed By"><span class="proposer">Jan</span></td>
-                    </tr>
-                    <tr class="category-printed">
-                        <td data-label="Category">📄 Printed Materials</td>
-                        <td data-label="Idea"><div class="idea-title">FAQ & Business Cards</div></td>
-                        <td data-label="Details" class="details-text">Revive and update a master FAQ sheet for common questions, especially regarding youth volunteer opportunities. Have general business cards available that point to an outreach contact.</td>
-                        <td data-label="Proposed By"><span class="proposer">Jan</span></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="accordion-container">
+            <!-- Signage & Visual Branding -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span class="accordion-indicator">▶</span>
+                    🎨 Signage & Visual Branding
+                </div>
+                <div class="accordion-content">
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Update Banner & Tablecloth</div>
+                        </div>
+                        <div class="suggestion-details">Refresh the primary banner to be more modern and artistic. Procure a new, modern tablecloth with the updated logo, potentially an adjustable one from a site like 4imprint.com.</div>
+                        <div><span class="proposer">Elaine, Jan</span></div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Digital Video/Photo Display</div>
+                        </div>
+                        <div class="suggestion-details">Use a laptop or digital frame to play a short (2-minute) rolling video about SFBBO's mission. A rotating digital photo display could also showcase the wide range of projects.</div>
+                        <div><span class="proposer">Chris, Jan</span></div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Enlarged Bay Area Project Map</div>
+                        </div>
+                        <div class="suggestion-details">Display an enlarged, poster-sized map of the Bay Area to use as a conversation starter. A map showing SFBBO's active project sites already exists in a handout and could be adapted.</div>
+                        <div><span class="proposer">Lisa, Debbie</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Displays & Games -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span class="accordion-indicator">▶</span>
+                    🎮 Interactive Displays & Games
+                </div>
+                <div class="accordion-content">
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Interactive Bird ID Game</div>
+                        </div>
+                        <div class="suggestion-details">Instead of a single-user scope, use three large photos of shorebirds (e.g., Snowy Plover, Killdeer, Long-billed Curlew) so groups can identify field marks together.</div>
+                        <div><span class="proposer">Lisa</span></div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Expanded Migration Map</div>
+                        </div>
+                        <div class="suggestion-details">Enhance the existing migration map to include birds SFBBO researches and incorporate MOTUS data. Add "jaw dropping" fun facts that passersby can read. The display could be made more interactive with laminated maps and velcro to show complex migration routes.</div>
+                        <div><span class="proposer">Jan, Lisa</span></div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Banding & MOTUS Display</div>
+                        </div>
+                        <div class="suggestion-details">Create a unified display featuring: a shortened, modified mist net from the station's old stock, potentially with a fake bird in it; a string of different-sized bird bands or old/problem bands if possible; and a photo/map of MOTUS towers.</div>
+                        <div><span class="proposer">Jan, Lisa, Debbie</span></div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Matching Games</div>
+                        </div>
+                        <div class="suggestion-details">Create a game where participants match program pins to a mission poster. Another idea is a larger, "lift the flap" style game matching photos of birds to their unique nest types (e.g., cup, scrape, hanging).</div>
+                        <div><span class="proposer">Debbie, Jan</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Physical Models & Specimens -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span class="accordion-indicator">▶</span>
+                    🔬 Physical Models & Specimens
+                </div>
+                <div class="accordion-content">
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Nest & Egg Display</div>
+                        </div>
+                        <div class="suggestion-details">Create a display with real bird nests, which could be sourced from volunteers or rehab centers. The display could also feature a model, like a fake gull on a nest with eggs, and subtle audio of bird calls.</div>
+                        <div><span class="proposer">Jan, Lisa</span></div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Habitat Restoration Props</div>
+                        </div>
+                        <div class="suggestion-details">Use simple props like a hand shovel, gloves, and fake grasses on the table to initiate conversations about habitat restoration and volunteer opportunities.</div>
+                        <div><span class="proposer">Lisa</span></div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Bird Specimen Display</div>
+                        </div>
+                        <div class="suggestion-details">Use the organization's collection of donated dead birds for a "show and tell" display. Staff could be asked about using bird skins that are currently destined for storage, which could be displayed in protective tubes.</div>
+                        <div><span class="proposer">Jan, Debbie</span></div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Burrowing Owl Display</div>
+                        </div>
+                        <div class="suggestion-details">Use a photo of a Burrowing Owl to create an engaging educational moment by asking visitors where owls live.</div>
+                        <div><span class="proposer">Lisa</span></div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Hand-holdable Models</div>
+                        </div>
+                        <div class="suggestion-details">Have secured, a hand-holdable models of different bird beaks and feet to demonstrate adaptation.</div>
+                        <div><span class="proposer">Jan</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Giveaways -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span class="accordion-indicator">▶</span>
+                    🎁 Giveaways
+                </div>
+                <div class="accordion-content">
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Stickers & Buttons</div>
+                        </div>
+                        <div class="suggestion-details">Produce stickers and buttons, as people enjoy them. New stickers could be created using popular designs from SFBBO's long history of t-shirts.</div>
+                        <div><span class="proposer">Jan</span></div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">3D-Printed Items</div>
+                        </div>
+                        <div class="suggestion-details">As a unique and inexpensive giveaway, produce 3D-printed items like bird whistles.</div>
+                        <div><span class="proposer">Elaine</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Printed Materials -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span class="accordion-indicator">▶</span>
+                    📄 Printed Materials
+                </div>
+                <div class="accordion-content">
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">Informational Handouts</div>
+                        </div>
+                        <div class="suggestion-details">Develop one-page summaries for specific projects. Consider a smaller, postcard-sized handout with project thumbnails and contact/social media info.</div>
+                        <div><span class="proposer">Jan</span></div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div>
+                            <div class="suggestion-title">FAQ & Business Cards</div>
+                        </div>
+                        <div class="suggestion-details">Revive and update a master FAQ sheet for common questions, especially regarding youth volunteer opportunities. Have general business cards available that point to an outreach contact.</div>
+                        <div><span class="proposer">Jan</span></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const tableBody = document.querySelector('.table-container tbody');
-            const rows = Array.from(tableBody.querySelectorAll('tr'));
-            const categories = {};
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
 
-            rows.forEach(row => {
-                const categoryName = row.querySelector('td[data-label="Category"]').textContent.trim();
-                if (!categories[categoryName]) {
-                    categories[categoryName] = [];
-                }
-                categories[categoryName].push(row);
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const accordionItem = this.parentElement;
+                    const isExpanded = accordionItem.classList.contains('expanded');
+
+                    // Toggle the current accordion item
+                    accordionItem.classList.toggle('expanded');
+                });
             });
-
-            for (const categoryName in categories) {
-                const categoryRows = categories[categoryName];
-                if (categoryRows.length > 1) {
-                    const headerRow = categoryRows[0];
-                    headerRow.classList.add('category-toggle');
-
-                    const firstCell = headerRow.querySelector('td[data-label="Category"]');
-                    if (firstCell) {
-                        firstCell.innerHTML = `<span class="indicator">▶</span>` + firstCell.innerHTML;
-                    }
-
-                    for (let i = 1; i < categoryRows.length; i++) {
-                        categoryRows[i].style.display = 'none';
-                    }
-
-                    headerRow.addEventListener('click', (e) => {
-                        if (e.target.tagName === 'A') return;
-
-                        headerRow.classList.toggle('expanded');
-                        const isExpanded = headerRow.classList.contains('expanded');
-
-                        for (let i = 1; i < categoryRows.length; i++) {
-                            categoryRows[i].style.display = isExpanded ? '' : 'none';
-                        }
-                    });
-                }
-            }
         });
     </script>
 
