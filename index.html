@@ -247,6 +247,48 @@
             h1 { font-size: 2.2em; }
             th, td { padding: 12px 15px; font-size: 0.9em; }
             .table-container { border-radius: 8px; }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tbody tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid var(--table-border-color);
+                border-radius: 8px;
+                padding: 10px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            tbody td {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 0;
+                border-bottom: 1px solid var(--table-border-color);
+            }
+
+            tbody td:last-child {
+                border-bottom: none;
+            }
+
+            tbody td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                color: var(--primary-color);
+                margin-right: 10px;
+            }
         }
 
         @media screen and (max-width: 480px) {
