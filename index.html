@@ -366,16 +366,20 @@
             
             <div class="stats-bar">
                 <div class="stat-item">
+                    <span class="stat-number" id="total-votes">0</span>
+                    <div class="stat-label">Total Votes</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="top-rated">--</span>
+                    <div class="stat-label">Top Rated</div>
+                </div>
+                <div class="stat-item">
                     <span class="stat-number">16</span>
-                    <div class="stat-label">Total Ideas</div>
+                    <div class="stat-label">Ideas</div>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number">5</span>
                     <div class="stat-label">Categories</div>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">4</span>
-                    <div class="stat-label">Contributors</div>
                 </div>
             </div>
         </div>
@@ -650,6 +654,7 @@
         for (let i = 1; i <= 16; i++) {
             updateVoteDisplay(i);
         }
+        updateStats();
 
         function vote(id, direction) {
             const userId = getUserId();
@@ -695,6 +700,7 @@
             localStorage.setItem('sfbbo-user-votes', JSON.stringify(userVotes));
             
             updateVoteDisplay(id);
+            updateStats();
         }
 
         function updateVoteDisplay(id) {
@@ -715,6 +721,51 @@
             const voteKey = `${userId}-${id}`;
             const userVote = userVotes[voteKey];
             updateButtonStates(id, userVote);
+        }
+
+        function updateStats() {
+            // Calculate total votes
+            const totalVotes = Object.values(votes).reduce((sum, count) => sum + Math.abs(count || 0), 0);
+            document.getElementById('total-votes').textContent = totalVotes;
+
+            // Find top rated idea
+            let topScore = -Infinity;
+            let topRatedId = null;
+            const ideaTitles = {
+                1: "Banner & Tablecloth",
+                2: "Digital Display",
+                3: "Bay Area Map", 
+                4: "Bird ID Game",
+                5: "Migration Map",
+                6: "Banding Display",
+                7: "Matching Games",
+                8: "Nest & Egg Display",
+                9: "Habitat Props",
+                10: "Bird Specimens",
+                11: "Burrowing Owl",
+                12: "Holdable Models",
+                13: "Stickers & Buttons",
+                14: "3D-Printed Items",
+                15: "Info Handouts",
+                16: "FAQ & Cards"
+            };
+
+            for (let i = 1; i <= 16; i++) {
+                const score = votes[i] || 0;
+                if (score > topScore) {
+                    topScore = score;
+                    topRatedId = i;
+                }
+            }
+
+            const topRatedElement = document.getElementById('top-rated');
+            if (topRatedId && topScore > 0) {
+                topRatedElement.textContent = ideaTitles[topRatedId];
+                topRatedElement.style.fontSize = '1.2em';
+            } else {
+                topRatedElement.textContent = '--';
+                topRatedElement.style.fontSize = '2em';
+            }
         }
 
         function updateButtonStates(id, userVote) {
