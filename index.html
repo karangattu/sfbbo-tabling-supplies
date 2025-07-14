@@ -193,7 +193,6 @@
             margin-bottom: 4px;
         }
 
-        /* Styles for collapsible functionality */
         .category-toggle {
             cursor: pointer;
         }
@@ -209,53 +208,35 @@
             transform: rotate(90deg);
         }
 
-        /* =================================== */
-        /* ==  PROFESSIONAL MOBILE STYLES   == */
-        /* =================================== */
         @media screen and (max-width: 768px) {
             body { padding: 5px; }
             .container { padding: 15px; margin: 10px auto; }
             h1 { font-size: 2em; }
             .subtitle { font-size: 1em; }
-            
-            .table-container {
-                overflow-x: hidden; /* Prevent horizontal scroll */
-            }
-
-            table, thead, tbody, th, td, tr {
-                display: block; /* Make everything a block element */
-            }
-
-            thead {
-                display: none; /* Hide desktop headers */
-            }
-
+            .table-container { overflow-x: hidden; }
+            table, thead, tbody, th, td, tr { display: block; }
+            thead { display: none; }
             tbody tr {
                 margin-bottom: 15px;
                 border: 1px solid var(--table-border-color);
                 border-radius: 8px;
                 padding: 15px;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-                background-color: var(--row-bg-even); /* Use a consistent card background */
+                background-color: var(--row-bg-even);
             }
-            
             tbody tr:nth-of-type(even) {
-                 background-color: var(--row-bg-even); /* Ensure consistent background */
+                 background-color: var(--row-bg-even);
             }
-            
             td {
                 padding: 10px 5px;
                 border: none;
                 border-bottom: 1px dashed var(--table-border-color);
-                text-align: left !important; /* Force left alignment */
-                white-space: normal; /* Allow text wrapping */
+                text-align: left !important;
+                white-space: normal;
             }
-
             td:last-child {
                 border-bottom: none;
             }
-
-            /* The magic part: Add labels before the content */
             td::before {
                 content: attr(data-label);
                 display: block;
@@ -266,13 +247,11 @@
                 font-size: 0.8em;
                 text-transform: uppercase;
             }
-            
-            /* Hide redundant mobile content and clean up layout */
             td .idea-title {
                 display: none;
             }
-             td[data-label="Category"]::before {
-                display: none; /* Hide label for the first cell which is already styled */
+            td[data-label="Category"]::before {
+                display: none;
             }
             td[data-label="Category"] {
                 font-size: 1.1em;
@@ -421,7 +400,6 @@
             const rows = Array.from(tableBody.querySelectorAll('tr'));
             const categories = {};
 
-            // Group rows by their first cell's content (the category name)
             rows.forEach(row => {
                 const categoryName = row.querySelector('td[data-label="Category"]').textContent.trim();
                 if (!categories[categoryName]) {
@@ -430,7 +408,6 @@
                 categories[categoryName].push(row);
             });
 
-            // Process each category group
             for (const categoryName in categories) {
                 const categoryRows = categories[categoryName];
                 if (categoryRows.length > 1) {
@@ -442,21 +419,17 @@
                         firstCell.innerHTML = `<span class="indicator">▶</span>` + firstCell.innerHTML;
                     }
 
-                    // Hide all but the first row initially
                     for (let i = 1; i < categoryRows.length; i++) {
                         categoryRows[i].style.display = 'none';
                     }
 
-                    // Add click event to the header row
                     headerRow.addEventListener('click', (e) => {
-                        // Ensure we don't toggle if a link inside is clicked
                         if (e.target.tagName === 'A') return;
 
                         headerRow.classList.toggle('expanded');
                         const isExpanded = headerRow.classList.contains('expanded');
 
                         for (let i = 1; i < categoryRows.length; i++) {
-                            // When showing, set display to empty string to let CSS decide the correct display type (block vs table-row)
                             categoryRows[i].style.display = isExpanded ? '' : 'none';
                         }
                     });
