@@ -211,6 +211,23 @@
             color: var(--text-color);
         }
 
+        /* Styles for collapsible functionality */
+        .category-toggle {
+            cursor: pointer;
+        }
+
+        .category-toggle .indicator {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 0.8em;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .category-toggle.expanded .indicator {
+            transform: rotate(90deg);
+        }
+
+
         /* Responsive Design */
         @media screen and (max-width: 768px) {
             body { padding: 10px; }
@@ -317,7 +334,7 @@
                     <tr class="category-physical">
                         <td>🔬 Physical Models & Specimens</td>
                         <td><div class="idea-title">Hand-holdable Models</div></td>
-                        <td class="details-text">Have secured, hand-holdable models of different bird beaks and feet to demonstrate adaptation.</td>
+                        <td class="details-text">Have secured, a hand-holdable models of different bird beaks and feet to demonstrate adaptation.</td>
                         <td><span class="proposer">Jan</span></td>
                     </tr>
                     <tr class="category-giveaways">
@@ -348,6 +365,55 @@
             </table>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tableBody = document.querySelector('.table-container tbody');
+            const rows = Array.from(tableBody.querySelectorAll('tr'));
+            const categories = {};
+
+            // Find the unique category class for each row
+            rows.forEach(row => {
+                const categoryClass = Array.from(row.classList).find(cls => cls.startsWith('category-'));
+                if (categoryClass) {
+                    if (!categories[categoryClass]) {
+                        categories[categoryClass] = [];
+                    }
+                    categories[categoryClass].push(row);
+                }
+            });
+
+            // Process each category group
+            for (const categoryClass in categories) {
+                const categoryRows = categories[categoryClass];
+                if (categoryRows.length > 1) {
+                    const headerRow = categoryRows[0];
+                    headerRow.classList.add('category-toggle');
+
+                    // Add a visual indicator (arrow)
+                    const firstCell = headerRow.querySelector('td');
+                    if (firstCell) {
+                        firstCell.innerHTML = `<span class="indicator">▶</span>` + firstCell.innerHTML;
+                    }
+
+                    // Hide all but the first row in this category
+                    for (let i = 1; i < categoryRows.length; i++) {
+                        categoryRows[i].style.display = 'none';
+                    }
+
+                    // Add a click event to the header row to toggle visibility
+                    headerRow.addEventListener('click', () => {
+                        headerRow.classList.toggle('expanded');
+                        const isExpanded = headerRow.classList.contains('expanded');
+
+                        for (let i = 1; i < categoryRows.length; i++) {
+                            categoryRows[i].style.display = isExpanded ? 'table-row' : 'none';
+                        }
+                    });
+                }
+            }
+        });
+    </script>
 
 </body>
 
