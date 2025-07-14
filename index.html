@@ -62,14 +62,17 @@
             position: relative;
         }
 
-        .header-section::before {
-            content: '🦅';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2.5em;
-            opacity: 0.8;
+        .header-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px auto;
+            display: block;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .header-logo:hover {
+            opacity: 1;
         }
 
         h1 {
@@ -356,6 +359,7 @@
 
     <div class="container">
         <div class="header-section">
+            <img src="sfbbo_logo.png" alt="SFBBO Logo" class="header-logo">
             <h1>SFBBO Tabling Supply Suggestions</h1>
             <p class="subtitle">A consolidated summary of ideas proposed to enhance the effectiveness of SFBBO's outreach
                 tables. The staff will consider these suggestions for the 2026 outreach budget.</p>
